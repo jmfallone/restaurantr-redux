@@ -1,91 +1,59 @@
-// import React, { FC } from 'react';
-// import { FlatList, ListRenderItem, View } from 'react-native';
-// import { ListItem, Avatar } from 'react-native-elements';
+import { Image, View } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome'
 
-// Define the type for the list items
 interface Review {
     title: string;
     subtitle: string;
+    rating: number;
+    image: string;
+    id: string;
 }
 
 
-// import { StyleSheet, ViewStyle } from 'react-native';
-
-// interface TimelineProps {
-//     reviews: ReviewType[];
-//     style: ViewStyle;
-// }
-
-// const renderItem: ListRenderItem<ReviewType> = ({ item }) => {
-//     return (
-//         <ListItem bottomDivider>
-//             <ListItem.Content>
-//                 <ListItem.Title>{item.title}</ListItem.Title>
-//                 <ListItem.Subtitle>{item.subtitle}</ListItem.Subtitle>
-//             </ListItem.Content>
-//         </ListItem>
-//     )
-// }
-
-// // const ReviewTimeline: FC<TimelineProps> = (props: TimelineProps) => {
-// //     return (<View style={props.style}>
-// //         {
-// //             props.reviews.map((l: ReviewType, i: number) => (
-// //                 <ListItem key={i} bottomDivider>
-// //                     <ListItem.Content>
-// //                         <ListItem.Title>{l.title}</ListItem.Title>
-// //                         <ListItem.Subtitle>{l.subtitle}</ListItem.Subtitle>
-// //                     </ListItem.Content>
-// //                 </ListItem>
-// //             ))
-// //         }
-// //     </View>)
-// // };xs
-
-// const ReviewTimeline: FC<TimelineProps> = (props: TimelineProps) => {
-//     return (
-//         <FlatList
-//           data={props.reviews}
-//           renderItem={renderItem}
-//           keyExtractor={(item, index) => index.toString()}
-//         />
-
-//       )
-// };
-
-
-// export default ReviewTimeline;
-
 
 import React from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
-import { ListItem } from 'react-native-elements';
-
-// interface Review {
-//   id: string;
-//   reviewer: string;
-//   rating: number;
-//   comment: string;
-// }
+import { Text, FlatList, StyleSheet } from 'react-native';
 
 interface ReviewsTimelineProps {
     reviews: Review[];
 }
 
+const ReviewListItem: React.FC<Review> = ({ title, subtitle, rating, image }) => {
+    const renderStars = () => {
+        let stars = [];
+        for (let i = 1; i <= 5; i++) {
+            stars.push(
+                <Icon
+                    key={i}
+                    name={i <= rating ? 'star' : 'star-o'}
+                    size={20}
+                    color="#FFD700"
+                />
+            );
+        }
+        return stars;
+    };
+
+    return (
+        <View style={styles.container}>
+            <Image source={{ uri: image }} style={styles.image} />
+            <View style={styles.textContainer}>
+                <Text style={styles.title}>{title}</Text>
+                <Text style={styles.subtitle}>{subtitle}</Text>
+                <View style={styles.ratingContainer}>{renderStars()}</View>
+            </View>
+        </View>)
+  };
+
 const ReviewsTimeline: React.FC<ReviewsTimelineProps> = ({ reviews }) => {
     const renderItem = ({ item }: { item: Review }) => (
-        <View style={styles.reviewItem}>
-            {/* <Text style={styles.reviewer}>{item.reviewer}</Text>
-      <Text style={styles.rating}>Rating: {item.rating}</Text>
-      <Text style={styles.comment}>{item.comment}</Text> */
-                <ListItem bottomDivider>
-                    <ListItem.Content>
-                        <ListItem.Title>{item.title}</ListItem.Title>
-                        <ListItem.Subtitle>{item.subtitle}</ListItem.Subtitle>
-                    </ListItem.Content>
-                </ListItem>
-            }
-        </View>
+        <ReviewListItem
+            title={item.title}
+            subtitle={item.subtitle}
+            rating={item.rating}
+            image={item.image}
+            id={item.id}
+        />
     );
 
     return (
@@ -93,32 +61,41 @@ const ReviewsTimeline: React.FC<ReviewsTimelineProps> = ({ reviews }) => {
             data={reviews}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
-            contentContainerStyle={styles.list}
         />
     );
 };
 
 const styles = StyleSheet.create({
-    list: {
+    container: {
+        flexDirection: 'row',
         padding: 10,
+        marginVertical: 8,
+        marginHorizontal: 16,
+        borderRadius: 10,
+        backgroundColor: '#fff',
+        elevation: 2,
     },
-    reviewItem: {
-        padding: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
+    image: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
     },
-    reviewer: {
-        fontSize: 16,
+    textContainer: {
+        flex: 1,
+        marginLeft: 10,
+        justifyContent: 'center',
+    },
+    title: {
+        fontSize: 18,
         fontWeight: 'bold',
     },
-    rating: {
+    subtitle: {
         fontSize: 14,
-        color: '#666',
+        color: '#555',
     },
-    comment: {
-        fontSize: 14,
+    ratingContainer: {
+        flexDirection: 'row',
         marginTop: 5,
     },
 });
-
 export default ReviewsTimeline;
