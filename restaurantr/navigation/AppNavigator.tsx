@@ -1,9 +1,9 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import ReviewDetailsScreen from './screens/ReviewDetailsScreen';
-import HomeScreen from './screens/HomeScreen';
+import ReviewDetailsScreen from '../screens/ReviewDetailsScreen';
+import HomeScreen from '../screens/HomeScreen';
 import { NavigationContainer } from '@react-navigation/native';
-import ReviewsScreen from './screens/ReviewsScreen';
-import { Review, sampleReview } from './models/Review';
+import ReviewsScreen from '../screens/ReviewsScreen';
+import { Review, sampleReview } from '../types/Review';
 import { enableScreens } from 'react-native-screens';
 
 enableScreens();
