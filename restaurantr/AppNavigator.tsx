@@ -1,21 +1,45 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import ReviewDetailsScreen from './screens/ReviewDetailsScreen';
-import ReviewsTimeline from './components/ReviewsTimeline';
+import HomeScreen from './screens/HomeScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import ReviewsScreen from './screens/ReviewsScreen';
+import { Review, sampleReview } from './models/Review';
+import { enableScreens } from 'react-native-screens';
 
-type RootStackParamList = {
-    ReviewsTimeline: undefined;
+enableScreens();
+
+
+export type RootStackParamList = {
+    HomeScreen: undefined;
+    ReviewsScreen: undefined;
     ReviewDetailsScreen: { review: Review };
 };
 
-const Stack = createStackNavigator<RootStackParamList>();
+const RootStackNavigator = createStackNavigator<RootStackParamList>();
 
 function AppNavigator() {
     return (
-        <Stack.Navigator>
-            <Stack.Screen name="ReviewsTimeline" component={ReviewsTimeline} />
-            <Stack.Screen name="ReviewDetailsScreen" component={ReviewDetailsScreen} />
-        </Stack.Navigator>
+        <NavigationContainer>
+            <RootStackNavigator.Navigator>
+
+                <RootStackNavigator.Screen
+                    name="HomeScreen"
+                    component={HomeScreen}
+                />
+
+                <RootStackNavigator.Screen
+                    name="ReviewsScreen"
+                    component={ReviewsScreen}
+                />
+
+                <RootStackNavigator.Screen
+                    name="ReviewDetailsScreen"
+                    component={ReviewDetailsScreen}
+                />
+            </RootStackNavigator.Navigator>
+        </NavigationContainer>
     );
 }
+
 
 export default AppNavigator;

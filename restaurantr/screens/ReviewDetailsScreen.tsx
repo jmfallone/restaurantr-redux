@@ -2,25 +2,17 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import { Review } from '../models/Review';
+import { RouteProp } from '@react-navigation/native';
+import { RootStackParamList } from '../AppNavigator';
 
-interface ReviewDetailsScreenProps {
-  title: string;
-  subtitle: string;
-  rating: number;
-  image: string;
-  id: string;
-  restaurantId: string;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
-  restaurantName: string;
-}
+type ReviewDetailsScreenProps = RouteProp<RootStackParamList, 'ReviewDetailsScreen'>;
 
-interface ReviewDetailsScreenProps {
-  review: Review;
-}
+type Props = {
+  route: ReviewDetailsScreenProps;
+};
 
-const ReviewDetailsScreen: React.FC<ReviewDetailsScreenProps> = ({ review }) => {
+const ReviewDetailsScreen: React.FC<Props> = ({ route }) => {
+  const { review } = route.params;
   const formatDate = (dateString: string): string => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);

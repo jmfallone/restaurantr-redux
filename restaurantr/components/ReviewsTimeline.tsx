@@ -1,39 +1,46 @@
-import { Image, View, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome'
-import { useNavigation } from '@react-navigation/native'; // Import navigation hook
-
 import React from 'react';
-import { Text, FlatList, StyleSheet } from 'react-native';
+import { Image, View, TouchableOpacity, Text, FlatList, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { Review } from '../models/Review';
-
 
 interface ReviewsTimelineProps {
     reviews: Review[];
-    navigation: any; // Adjust this type as needed
-    route: any; // Adjust this type as needed
 }
 
+type RootStackParamList = {
+    ReviewDetailsScreen: { review: Review };
+};
 
-const ReviewListItem: React.FC<Review> = ({ title, subtitle, rating, image, id }) => {
-    const navigation = useNavigation(); // Initialize navigation
+const ReviewListItem: React.FC<Review> = ({ title, subtitle, rating, image, id, restaurantId, userId, createdAt, updatedAt, restaurantName }) => {
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
     const renderStars = () => {
-        let stars = [];
-        for (let i = 1; i <= 5; i++) {
-            stars.push(
-                <Icon
-                    key={i}
-                    name={i <= rating ? 'star' : 'star-o'}
-                    size={20}
-                    color="#FFD700"
-                />
-            );
-        }
-        return stars;
+        return Array.from({ length: 5 }, (_, i) => (
+            <Icon
+                key={i}
+                name={i < rating ? 'star' : 'star-o'}
+                size={20}
+                color="#FFD700"
+            />
+        ));
     };
 
     const handlePress = () => {
-        navigation.navigate('ReviewDetailsScreen', { review: { title, subtitle, rating, image, id } });
+        const review: Review = {
+            title,
+            subtitle,
+            rating,
+            image,
+            id,
+            restaurantId,
+            userId,
+            createdAt,
+            updatedAt,
+            restaurantName
+        };
+
+        navigation.navigate('ReviewDetailsScreen', { review });
     };
 
     return (
@@ -52,13 +59,7 @@ const ReviewListItem: React.FC<Review> = ({ title, subtitle, rating, image, id }
 
 const ReviewsTimeline: React.FC<ReviewsTimelineProps> = ({ reviews }) => {
     const renderItem = ({ item }: { item: Review }) => (
-        <ReviewListItem
-            title={item.title}
-            subtitle={item.subtitle}
-            rating={item.rating}
-            image={item.image}
-            id={item.id}
-        />
+        <ReviewListItem {...item} />
     );
 
     return (
@@ -103,4 +104,6 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
 });
+
+export type { ReviewsTimelineProps };
 export default ReviewsTimeline;
