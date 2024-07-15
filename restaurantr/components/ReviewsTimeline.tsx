@@ -1,24 +1,22 @@
-import { Image, View } from 'react-native';
+import { Image, View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
-
-interface Review {
-    title: string;
-    subtitle: string;
-    rating: number;
-    image: string;
-    id: string;
-}
-
-
+import { useNavigation } from '@react-navigation/native'; // Import navigation hook
 
 import React from 'react';
 import { Text, FlatList, StyleSheet } from 'react-native';
+import { Review } from '../models/Review';
+
 
 interface ReviewsTimelineProps {
     reviews: Review[];
+    navigation: any; // Adjust this type as needed
+    route: any; // Adjust this type as needed
 }
 
-const ReviewListItem: React.FC<Review> = ({ title, subtitle, rating, image }) => {
+
+const ReviewListItem: React.FC<Review> = ({ title, subtitle, rating, image, id }) => {
+    const navigation = useNavigation(); // Initialize navigation
+
     const renderStars = () => {
         let stars = [];
         for (let i = 1; i <= 5; i++) {
@@ -34,16 +32,23 @@ const ReviewListItem: React.FC<Review> = ({ title, subtitle, rating, image }) =>
         return stars;
     };
 
+    const handlePress = () => {
+        navigation.navigate('ReviewDetailsScreen', { review: { title, subtitle, rating, image, id } });
+    };
+
     return (
-        <View style={styles.container}>
-            <Image source={{ uri: image }} style={styles.image} />
-            <View style={styles.textContainer}>
-                <Text style={styles.title}>{title}</Text>
-                <Text style={styles.subtitle}>{subtitle}</Text>
-                <View style={styles.ratingContainer}>{renderStars()}</View>
+        <TouchableOpacity onPress={handlePress}>
+            <View style={styles.container}>
+                <Image source={{ uri: image }} style={styles.image} />
+                <View style={styles.textContainer}>
+                    <Text style={styles.title}>{title}</Text>
+                    <Text style={styles.subtitle}>{subtitle}</Text>
+                    <View style={styles.ratingContainer}>{renderStars()}</View>
+                </View>
             </View>
-        </View>)
-  };
+        </TouchableOpacity>
+    );
+};
 
 const ReviewsTimeline: React.FC<ReviewsTimelineProps> = ({ reviews }) => {
     const renderItem = ({ item }: { item: Review }) => (
