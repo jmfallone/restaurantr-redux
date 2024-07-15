@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, View, TouchableOpacity, Text, FlatList, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { Review } from '../models/Review';
+import { Review } from '../types/Review';
 
 interface ReviewsTimelineProps {
     reviews: Review[];

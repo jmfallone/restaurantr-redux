@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import { Rating } from 'react-native-ratings';
-import { Review } from '../models/Review';
+import { Review } from '../types/Review';
 import { RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../AppNavigator';
+import { RootStackParamList } from '../navigation/AppNavigator';
 
 type ReviewDetailsScreenProps = RouteProp<RootStackParamList, 'ReviewDetailsScreen'>;
 
