@@ -12,7 +12,7 @@ enableScreens();
 export type RootStackParamList = {
     HomeScreen: undefined;
     ReviewsScreen: undefined;
-    ReviewDetailsScreen: { review: Review };
+    ReviewDetailsScreen: { reviewId: number };
 };
 
 const RootStackNavigator = createStackNavigator<RootStackParamList>();

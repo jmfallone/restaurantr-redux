@@ -1,9 +1,10 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import { Review } from '../types/Review';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/AppNavigator';
+import { fetchReview } from '../api';
 
 type ReviewDetailsScreenProps = RouteProp<RootStackParamList, 'ReviewDetailsScreen'>;
 
@@ -12,11 +13,54 @@ type Props = {
 };
 
 const ReviewDetailsScreen: React.FC<Props> = ({ route }) => {
-  const { review } = route.params;
+  const { reviewId } = route.params;
+  const [review, setReview] = useState<Review | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadReview = async () => {
+      try {
+        const fetchedReview = await fetchReview(reviewId);
+        setReview(fetchedReview);
+      } catch (err) {
+        setError('Failed to load review. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadReview();
+  }, [reviewId]);
+
   const formatDate = (dateString: string): string => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
+
+  if (loading) {
+    return (
+      <View style={styles.contentContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.contentContainer}>
+        <Text>{error}</Text>
+      </View>
+    );
+  }
+
+  if (!review) {
+    return (
+      <View style={styles.contentContainer}>
+        <Text>No review found</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -93,5 +137,4 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
 });
-
 export default ReviewDetailsScreen;
