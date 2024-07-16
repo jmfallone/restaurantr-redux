@@ -3,16 +3,15 @@ import { Image, View, TouchableOpacity, Text, FlatList, StyleSheet } from 'react
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { Review } from '../types/Review';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
 
 interface ReviewsTimelineProps {
     reviews: Review[];
 }
 
-type RootStackParamList = {
-    ReviewDetailsScreen: { review: Review };
-};
 
-const ReviewListItem: React.FC<Review> = ({ title, subtitle, rating, image, id, restaurantId, userId, createdAt, updatedAt, restaurantName }) => {
+const ReviewListItem: React.FC<Review> = ({ title, subtitle, rating, image, id, restaurantName }) => {
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
     const renderStars = () => {
@@ -27,20 +26,7 @@ const ReviewListItem: React.FC<Review> = ({ title, subtitle, rating, image, id, 
     };
 
     const handlePress = () => {
-        const review: Review = {
-            title,
-            subtitle,
-            rating,
-            image,
-            id,
-            restaurantId,
-            userId,
-            createdAt,
-            updatedAt,
-            restaurantName
-        };
-
-        navigation.navigate('ReviewDetailsScreen', { review });
+        navigation.navigate('ReviewDetailsScreen', { reviewId: id });
     };
 
     return (
@@ -50,6 +36,7 @@ const ReviewListItem: React.FC<Review> = ({ title, subtitle, rating, image, id, 
                 <View style={styles.textContainer}>
                     <Text style={styles.title}>{title}</Text>
                     <Text style={styles.subtitle}>{subtitle}</Text>
+                    <Text style={styles.restaurantName}>{restaurantName}</Text>
                     <View style={styles.ratingContainer}>{renderStars()}</View>
                 </View>
             </View>
@@ -66,10 +53,11 @@ const ReviewsTimeline: React.FC<ReviewsTimelineProps> = ({ reviews }) => {
         <FlatList
             data={reviews}
             renderItem={renderItem}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
         />
     );
 };
+
 
 const styles = StyleSheet.create({
     container: {
@@ -102,6 +90,11 @@ const styles = StyleSheet.create({
     ratingContainer: {
         flexDirection: 'row',
         marginTop: 5,
+    },
+    restaurantName: {
+        fontSize: 14,
+        color: '#777',
+        marginBottom: 5,
     },
 });
 

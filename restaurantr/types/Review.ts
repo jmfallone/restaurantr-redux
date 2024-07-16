@@ -3,7 +3,7 @@ export interface Review {
     subtitle: string;
     rating: number;
     image: string;
-    id: string;
+    id: number;
     restaurantId: string;
     userId: string;
     createdAt: string;
