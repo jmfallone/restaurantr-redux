@@ -1,9 +1,8 @@
-import { enableScreens } from 'react-native-screens';
+import { enableScreens } from 'react-native-screens'
 import AppNavigator from './navigation/AppNavigator';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 enableScreens();
-
 
 const App = () => {
   return (

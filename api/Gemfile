@@ -45,3 +45,5 @@ group :development do
   # gem "spring"
 end
 
+
+gem "firebase-admin", "~> 0.3.0"
