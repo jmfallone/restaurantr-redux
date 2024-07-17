@@ -16,7 +16,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       // If successful, navigate to HomeScreen
-      navigation.navigate('HomeScreen');
+      navigation.replace('HomeScreen');
     } catch (error) {
       console.error(error);
       // Handle login errors here
@@ -39,6 +39,11 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
         secureTextEntry
       />
       <Button title="Login" onPress={handleLogin} />
+      <Text>&nbsp;</Text>
+      <Button
+        title="Need to sign up?"
+        onPress={() => navigation.navigate('SignupScreen')}
+      />
     </View>
   );
 };

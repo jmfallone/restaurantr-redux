@@ -5,11 +5,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import ReviewsScreen from '../screens/ReviewsScreen';
 import LoginScreen from '../screens/LoginScreen';
 import { enableScreens } from 'react-native-screens';
+import SignupScreen from '../screens/SignupScreen';
 
 enableScreens();
 
 export type RootStackParamList = {
     LoginScreen: undefined;
+    SignupScreen: undefined;
     HomeScreen: undefined;
     ReviewsScreen: undefined;
     ReviewDetailsScreen: { reviewId: number };
@@ -25,6 +27,10 @@ function AppNavigator() {
                     name="LoginScreen"
                     component={LoginScreen}
                     options={{ headerShown: false }}
+                />
+                <RootStackNavigator.Screen
+                    name="SignupScreen"
+                    component={SignupScreen}
                 />
                 <RootStackNavigator.Screen
                     name="HomeScreen"
