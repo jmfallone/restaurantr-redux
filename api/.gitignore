@@ -4,9 +4,6 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
-# ignore private key changes
-private_key.json
-
 # Ignore bundler config.
 /.bundle
 
@@ -31,6 +28,8 @@ private_key.json
 /tmp/storage/*
 !/tmp/storage/
 !/tmp/storage/.keep
+
+/public/assets
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
