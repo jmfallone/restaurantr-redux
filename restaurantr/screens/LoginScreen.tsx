@@ -1,25 +1,25 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import { Button, Input } from 'react-native-elements';
-import { auth } from '../firebase'
+import { login, setAuthToken } from '../api'; // Make sure this path is correct
 
 interface LoginScreenProps {
   navigation: any;
 }
 
 const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const token = await login({ username, password });
+      setAuthToken(token);
       // If successful, navigate to HomeScreen
       navigation.replace('HomeScreen');
     } catch (error) {
       console.error(error);
-      // Handle login errors here
+      Alert.alert('Login Failed', 'Please check your credentials and try again.');
     }
   };
 
@@ -27,9 +27,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
       <Input
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
         autoCapitalize="none"
       />
       <Input
