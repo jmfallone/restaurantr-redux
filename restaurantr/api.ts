@@ -1,37 +1,39 @@
-import { Review } from "./types/Review";
-import { auth } from './firebase';
+// api.ts
+import axios from 'axios';
 
-// TODO: Make configurable before deployment :)
-const API_BASE_URL = 'http://127.0.0.1:3000/api/v1';
+const API_URL = 'http://localhost:3000';  // Replace with your actual API URL
 
-const getAuthorizationHeader = async () => {
-    const user = auth.currentUser;
-    if (!user) {
-        throw new Error("No user is currently signed in.");
+interface LoginData {
+    username: string;
+    password: string;
+}
+
+interface SignupData extends LoginData {
+    email: string;
+}
+
+interface AuthResponse {
+    token: string;
+}
+
+export const login = async (data: LoginData): Promise<string> => {
+    try {
+        const response = await axios.post<AuthResponse>(`${API_URL}/login`, data);
+        return response.data.token;
+    } catch (error) {
+        throw new Error('Login failed');
     }
-    const token = await user.getIdToken();
-    return { Authorization: `Bearer ${token}` };
 };
 
-// TODO: pagination? server & client side
-export const fetchAllReviews = async (): Promise<Review[]> => {
-    const headers = await getAuthorizationHeader();
-    const response = await fetch(`${API_BASE_URL}/reviews`, {
-        headers: headers,
-    });
-    if (!response.ok) {
-        throw new Error('Failed to fetch reviews');
+export const signup = async (data: SignupData): Promise<string> => {
+    try {
+        const response = await axios.post<AuthResponse>(`${API_URL}/signup`, data);
+        return response.data.token;
+    } catch (error) {
+        throw new Error('Signup failed');
     }
-    return response.json();
 };
 
-export const fetchReview = async (id: number): Promise<Review> => {
-    const headers = await getAuthorizationHeader();
-    const response = await fetch(`${API_BASE_URL}/reviews/${id}`, {
-        headers: headers,
-    });
-    if (!response.ok) {
-        throw new Error('Failed to fetch review');
-    }
-    return response.json();
+export const setAuthToken = (token: string) => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 };
