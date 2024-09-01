@@ -1,7 +1,7 @@
 // api.ts
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000';  // Replace with your actual API URL
+const API_URL = 'https://restaurantr-redux-3f6ddc178e50.herokuapp.com';
 
 interface LoginData {
     username: string;
