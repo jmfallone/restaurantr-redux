@@ -8,8 +8,13 @@ interface LoginData {
     password: string;
 }
 
-interface SignupData extends LoginData {
-    email: string;
+interface UserSignupData {
+    username: string;
+    password: string;
+}
+
+interface SignupData {
+    user: UserSignupData;
 }
 
 interface AuthResponse {
@@ -27,7 +32,7 @@ export const login = async (data: LoginData): Promise<string> => {
 
 export const signup = async (data: SignupData): Promise<string> => {
     try {
-        const response = await axios.post<AuthResponse>(`${API_URL}/signup`, data);
+        const response = await axios.post<AuthResponse>(`${API_URL}/users`, data);
         return response.data.token;
     } catch (error) {
         throw new Error('Signup failed');
