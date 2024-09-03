@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_24_024517) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_03_013416) do
+  create_table "reviews", force: :cascade do |t|
+    t.string "creator_username"
+    t.datetime "date_created"
+    t.integer "score"
+    t.string "title"
+    t.text "description"
+    t.integer "store_id"
+    t.text "images"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_username"], name: "index_reviews_on_creator_username"
+    t.index ["store_id"], name: "index_reviews_on_store_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "password_digest"
