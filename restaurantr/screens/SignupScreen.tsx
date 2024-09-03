@@ -18,7 +18,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
 
     const handleSignup = async () => {
         try {
-            const token = await signup({ username, email, password });
+            const token = await signup({ user: { username, password } });
             setAuthToken(token);
             console.log('User created successfully');
             navigation.replace('HomeScreen');
