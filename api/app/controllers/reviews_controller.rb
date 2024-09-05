@@ -4,9 +4,12 @@ class ReviewsController < ApplicationController
 
   def index
     @reviews = Review.all
+    render json: @reviews
   end
 
-  def show; end
+  def show
+    render json: @review
+  end
 
   def new
     @review = Review.new
@@ -19,6 +22,7 @@ class ReviewsController < ApplicationController
     if @review.save
       redirect_to @review, notice: 'Review was successfully created.'
     else
+      Rails.logger.error(@review.errors.full_messages)
       render :new
     end
   end
