@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, ActivityIndicator, Dimensions } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import { Review } from '../types/Review';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import { fetchReview } from '../api';
+import { fetchReviewById } from '../api';
 
 type ReviewDetailsScreenProps = RouteProp<RootStackParamList, 'ReviewDetailsScreen'>;
 
 type Props = {
   route: ReviewDetailsScreenProps;
 };
+
+const { width } = Dimensions.get('window');
 
 const ReviewDetailsScreen: React.FC<Props> = ({ route }) => {
   const { reviewId } = route.params;
@@ -21,7 +23,7 @@ const ReviewDetailsScreen: React.FC<Props> = ({ route }) => {
   useEffect(() => {
     const loadReview = async () => {
       try {
-        const fetchedReview = await fetchReview(reviewId);
+        const fetchedReview = await fetchReviewById(reviewId);
         setReview(fetchedReview);
       } catch (err) {
         setError('Failed to load review. Please try again.');
@@ -64,22 +66,28 @@ const ReviewDetailsScreen: React.FC<Props> = ({ route }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Image source={{ uri: review.image }} style={styles.image} />
+      {review.images && review.images.length > 0 && (
+        <ScrollView horizontal pagingEnabled style={styles.imageScrollView}>
+          {review.images.map((image, index) => (
+            <Image key={index} source={{ uri: image }} style={styles.image} />
+          ))}
+        </ScrollView>
+      )}
       <View style={styles.contentContainer}>
         <Text style={styles.title}>{review.title}</Text>
-        <Text style={styles.subtitle}>{review.subtitle}</Text>
-        <Text style={styles.restaurantName}>{review.restaurantName}</Text>
+        <Text style={styles.creatorUsername}>by {review.creatorUsername}</Text>
         <View style={styles.ratingContainer}>
           <Rating
             readonly
-            startingValue={review.rating}
+            startingValue={review.score}
             imageSize={24}
             style={styles.rating}
           />
-          <Text style={styles.ratingText}>{review.rating.toFixed(1)}</Text>
+          <Text style={styles.ratingText}>{review.score.toFixed(1)}</Text>
         </View>
+        <Text style={styles.description}>{review.description}</Text>
         <Text style={styles.date}>
-          Reviewed on {formatDate(review.createdAt)}
+          Reviewed on {formatDate(review.dateCreated)}
         </Text>
         {review.createdAt !== review.updatedAt && (
           <Text style={styles.date}>
@@ -96,8 +104,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  imageScrollView: {
+    height: 200,
+  },
   image: {
-    width: '100%',
+    width: width,
     height: 200,
     resizeMode: 'cover',
   },
@@ -109,14 +120,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 8,
   },
-  subtitle: {
-    fontSize: 18,
+  creatorUsername: {
+    fontSize: 16,
     color: '#666',
-    marginBottom: 16,
-  },
-  restaurantName: {
-    fontSize: 20,
-    fontWeight: '600',
     marginBottom: 16,
   },
   ratingContainer: {
@@ -131,10 +137,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  description: {
+    fontSize: 16,
+    marginBottom: 16,
+  },
   date: {
     fontSize: 14,
     color: '#888',
     marginBottom: 8,
   },
 });
+
 export default ReviewDetailsScreen;
