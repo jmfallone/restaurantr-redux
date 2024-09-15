@@ -60,3 +60,19 @@ export const fetchAllReviews = async (): Promise<Review[]> => {
         }
     }
 };
+
+export const fetchReviewById = async (id: number): Promise<Review> => {
+    try {
+        const response = await axios.get(`${API_URL}/reviews/${id}`);
+        return camelizeKeys(response.data) as Review;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            if (error.response?.status === 404) {
+                throw new Error(`Review with id ${id} not found`);
+            }
+            throw new Error(`Failed to fetch review: ${error.response?.data.message || error.message}`);
+        } else {
+            throw new Error('An unexpected error occurred while fetching the review');
+        }
+    }
+};
