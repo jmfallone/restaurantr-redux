@@ -1,10 +1,21 @@
 class ReviewsController < ApplicationController
   before_action :set_review, only: %i[show edit update destroy]
   before_action :authenticate
-
   def index
-    @reviews = Review.all
-    render json: @reviews
+    page = params[:page]&.to_i || 1
+    per_page = params[:per_page]&.to_i || 10
+
+    @reviews = Review.order(created_at: :desc).page(page).per(per_page)
+    total_pages = @reviews.total_pages
+
+    render json: {
+      reviews: @reviews,
+      meta: {
+        current_page: page,
+        total_pages:,
+        per_page:
+      }
+    }
   end
 
   def show
