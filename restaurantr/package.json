@@ -18,9 +18,9 @@
     "expo-status-bar": "~1.12.1",
     "firebase": "^10.12.3",
     "firebaseui": "^6.1.0",
+    "humps": "^2.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-firebaseui": "^6.0.0",
     "react-native": "0.74.3",
     "react-native-elements": "^3.4.3",
     "react-native-gesture-handler": "~2.16.1",
@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@types/humps": "^2.0.6",
     "@types/react": "~18.2.45",
     "typescript": "~5.3.3"
   },
