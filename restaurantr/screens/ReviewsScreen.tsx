@@ -14,7 +14,7 @@ const ReviewsScreen: React.FC = () => {
     const loadReviews = async () => {
       try {
         const fetchedReviews = await fetchAllReviews();
-        setReviews(fetchedReviews);
+        setReviews(fetchedReviews.reviews);
       } catch (err) {
         setError('Failed to load reviews. Please try again.');
       } finally {

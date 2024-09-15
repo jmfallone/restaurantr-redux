@@ -11,6 +11,15 @@ export interface Review {
     updatedAt: string;
 }
 
+export interface PaginatedResponse<T> {
+    reviews: T[];
+    meta: {
+        currentPage: number;
+        totalPages: number;
+        perPage: number;
+    };
+}
+
 export const sampleReview: Review = {
     id: 1,
     creatorUsername: "foodie123",

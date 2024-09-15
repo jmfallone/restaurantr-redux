@@ -1,6 +1,6 @@
 // api.ts
 import axios from 'axios';
-import { Review } from './types/Review';
+import { PaginatedResponse, Review } from './types/Review';
 import { camelizeKeys } from 'humps';
 
 const API_URL = 'https://restaurantr-redux-3f6ddc178e50.herokuapp.com';
@@ -45,17 +45,19 @@ export const setAuthToken = (token: string) => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 };
 
-export const fetchAllReviews = async (): Promise<Review[]> => {
+export const fetchAllReviews = async (page: number = 1, perPage: number = 10): Promise<PaginatedResponse<Review>> => {
     try {
-        const response = await axios.get<Review[]>(`${API_URL}/reviews`);
-        return camelizeKeys(response.data) as Review[];
+        const response = await axios.get<PaginatedResponse<Review>>(`${API_URL}/reviews`, {
+            params: { page, per_page: perPage }
+        });
+        return {
+            reviews: camelizeKeys(response.data.reviews) as Review[],
+            meta: camelizeKeys(response.data.meta) as PaginatedResponse<Review>['meta']
+        };
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
             throw new Error(`Failed to fetch reviews: ${error.response.data.message || error.message}`);
         } else {
-            // Something happened in setting up the request that triggered an Error
             throw new Error('An unexpected error occurred while fetching reviews');
         }
     }
